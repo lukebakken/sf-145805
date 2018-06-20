@@ -1,0 +1,40 @@
+RabbitMQ upgraded from 3.6.12 to 3.6.14
+
+https://github.com/rabbitmq/rabbitmq-server/releases/tag/rabbitmq_v3_6_13
+
+https://github.com/rabbitmq/rabbitmq-server/releases/tag/rabbitmq_v3_6_14
+
+Erlang upgraded from 19.3.6.2 to 19.3.6.4
+
+http://erlang.org/download/OTP-19.3.6.3.README
+
+http://erlang.org/download/OTP-19.3.6.4.README
+
+https://bugs.erlang.org/browse/ERL-430
+
+cat .envrc
+
+file is generated
+
+bin is empty
+
+make update_stemcell
+
+# maybe install direnv
+source ./.envrc
+
+then connected
+
+deployment is s145805
+
+make ssh
+
+rabbitmq-remsh
+
+env | grep PASS
+
+make login_cf
+
+org is s145805
+
+check CF manifest
