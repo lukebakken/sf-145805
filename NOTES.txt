@@ -38,3 +38,179 @@ make login_cf
 org is s145805
 
 check CF manifest
+
+lbakken@shostakovich ~/development/rabbitmq/umbrella/deps/rabbit (master=)
+$ git diff rabbitmq_v3_6_12...rabbitmq_v3_6_15 ./src/gm.erl
+diff --git a/src/gm.erl b/src/gm.erl
+index cf3e21701..d6005fe55 100644
+--- a/src/gm.erl
++++ b/src/gm.erl
+@@ -1354,9 +1354,12 @@ find_common(A, B, Common) ->
+             find_common(A1, B1, queue:in(Val, Common));
+         {{empty, _A}, _} ->
+             {Common, B};
+-        {_, {_, B1}} ->
++        %% Drop value from B.
++        %% Match value to avoid infinite loop, since {empty, B} = queue:out(B).
++        {_, {{value, _}, B1}} ->
+             find_common(A, B1, Common);
+-        {{_, A1}, _} ->
++        %% Drop value from A. Empty A should be matched by second close.
++        {{{value, _}, A1}, _} ->
+             find_common(A1, B, Common)
+     end.
+
+MONITOR_P
+{19, FromPid, ToProc, Ref}, where FromPid = monitoring process and ToProc = monitored process pid or name (atom)
+
+Erlang Distribution Protocol
+    Length: 43
+    DistributionHeader
+        VERSION_MAGIC: 131
+        Tag: DIST_HEADER (68)
+        NumberOfAtomCacheRefs: 2
+        Flags: 3000
+        AtomCacheRefs
+    ControlMessage
+        Tag: SMALL_TUPLE_EXT (104)
+        Arity: 4
+        SMALL_INTEGER_EXT: 19
+            Tag: SMALL_INTEGER_EXT (97)
+            Int: 19
+        PID_EXT
+            Tag: PID_EXT (103)
+            Node: 0
+                Tag: ATOM_CACHE_REF (82)
+                AtomCacheReferenceIndex: 0
+            ID: 0x00006ba6
+            Serial: 687
+            Creation: 1
+        ATOM_CACHE_REF: 1
+            Tag: ATOM_CACHE_REF (82)
+            AtomCacheReferenceIndex: 1
+        NEW_REFERENCE_EXT
+            Tag: NEW_REFERENCE_EXT (114)
+            Len: 3
+            Node: 0
+                Tag: ATOM_CACHE_REF (82)
+                AtomCacheReferenceIndex: 0
+            Creation: 1
+            ID[0]: 0x000217B8
+            ID[1]: 0xC7680004
+            ID[2]: 0x00000004
+
+REG_SEND
+{6, FromPid, Unused, ToName}
+
+Erlang Distribution Protocol
+    Length: 156
+    DistributionHeader
+        VERSION_MAGIC: 131
+        Tag: DIST_HEADER (68)
+        NumberOfAtomCacheRefs: 11
+        Flags: 001364040500
+            .... 0... = NewCacheEntryFlag: NewCacheEntryFlag[ 0]: ---
+            SegmentIndex     [ 0]: 0
+            .... 0... = NewCacheEntryFlag: NewCacheEntryFlag[ 1]: ---
+            SegmentIndex     [ 1]: 0
+            .... 0... = NewCacheEntryFlag: NewCacheEntryFlag[ 2]: ---
+            SegmentIndex     [ 2]: 3
+            .... 0... = NewCacheEntryFlag: NewCacheEntryFlag[ 3]: ---
+            SegmentIndex     [ 3]: 16
+            .... 0... = NewCacheEntryFlag: NewCacheEntryFlag[ 4]: ---
+            SegmentIndex     [ 4]: 4
+            .... 0... = NewCacheEntryFlag: NewCacheEntryFlag[ 5]: ---
+            SegmentIndex     [ 5]: 96
+            .... 0... = NewCacheEntryFlag: NewCacheEntryFlag[ 6]: ---
+            SegmentIndex     [ 6]: 4
+            .... 0... = NewCacheEntryFlag: NewCacheEntryFlag[ 7]: ---
+            SegmentIndex     [ 7]: 0
+            .... 0... = NewCacheEntryFlag: NewCacheEntryFlag[ 8]: ---
+            SegmentIndex     [ 8]: 5
+            .... 0... = NewCacheEntryFlag: NewCacheEntryFlag[ 9]: ---
+            SegmentIndex     [ 9]: 0
+            .... 0... = NewCacheEntryFlag: NewCacheEntryFlag[10]: ---
+            SegmentIndex     [10]: 0
+            ...0 ..0. = LongAtoms: No
+        AtomCacheRefs
+            AtomCacheRef[ 0]:  40
+                InternalSegmentIndex: 40
+            AtomCacheRef[ 1]:   5
+                InternalSegmentIndex: 5
+            AtomCacheRef[ 2]: 141
+                InternalSegmentIndex: 141
+            AtomCacheRef[ 3]: 154
+                InternalSegmentIndex: 154
+            AtomCacheRef[ 4]: 183
+                InternalSegmentIndex: 183
+            AtomCacheRef[ 5]: 237
+                InternalSegmentIndex: 237
+            AtomCacheRef[ 6]: 118
+                InternalSegmentIndex: 118
+            AtomCacheRef[ 7]:  10
+                InternalSegmentIndex: 10
+            AtomCacheRef[ 8]: 122
+                InternalSegmentIndex: 122
+            AtomCacheRef[ 9]:   1
+                InternalSegmentIndex: 1
+            AtomCacheRef[10]:   7
+                InternalSegmentIndex: 7
+ControlMessage
+    Tag: SMALL_TUPLE_EXT (104)
+    Arity: 4
+    SMALL_INTEGER_EXT: 6
+        Tag: SMALL_INTEGER_EXT (97)
+        Int: 6
+    PID_EXT
+        Tag: PID_EXT (103)
+        Node: 0
+            Tag: ATOM_CACHE_REF (82)
+            AtomCacheReferenceIndex: 0
+        ID: 0x00006ba6
+        Serial: 687
+        Creation: 1
+    ATOM_CACHE_REF: 1
+        Tag: ATOM_CACHE_REF (82)
+        AtomCacheReferenceIndex: 1
+    ATOM_CACHE_REF: 2
+        Tag: ATOM_CACHE_REF (82)
+        AtomCacheReferenceIndex: 2
+Message
+    Tag: SMALL_TUPLE_EXT (104)
+    Arity: 3
+    ATOM_CACHE_REF: 3
+        Tag: ATOM_CACHE_REF (82)
+        AtomCacheReferenceIndex: 3
+    SMALL_TUPLE_EXT
+        Tag: SMALL_TUPLE_EXT (104)
+        Arity: 2
+        PID_EXT
+            Tag: PID_EXT (103)
+            Node: 0
+                Tag: ATOM_CACHE_REF (82)
+                AtomCacheReferenceIndex: 0
+            ID: 0x00006ba6
+            Serial: 687
+            Creation: 1
+        SMALL_TUPLE_EXT
+            Tag: SMALL_TUPLE_EXT (104)
+            Arity: 2
+            NEW_REFERENCE_EXT
+                Tag: NEW_REFERENCE_EXT (114)
+                Len: 3
+                Node: 0
+                    Tag: ATOM_CACHE_REF (82)
+                    AtomCacheReferenceIndex: 0
+                Creation: 1
+                ID[0]: 0x000217B7
+                ID[1]: 0xC7680004
+                ID[2]: 0x00000004
+            ATOM_CACHE_REF: 4
+                Tag: ATOM_CACHE_REF (82)
+                AtomCacheReferenceIndex: 4
+
+SEND
+{2, Unused, ToPid}
+
+DEMONITOR_P
+{20, FromPid, ToProc, Ref}, where FromPid = monitoring process and ToProc = monitored process pid or name (atom)
