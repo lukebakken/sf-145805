@@ -1,0 +1,79 @@
+app_defaults: &app_defaults
+  buildpack: java_buildpack
+  disk_quota: 256M
+  memory: 2G
+  path: /Volumes/london-services/rabbitmq/rabbitmq-perf-test-for-cf/target/pcf-perf-test-1.0-SNAPSHOT.jar
+  health-check-type: none
+  no-route: true
+  services:
+    - rmq
+
+perf_test_defaults: &perf_test_defaults
+  INTERVAL: 30
+  MSG_SIZE: 1000
+  PRODUCERS: 500
+  CONSUMERS: 500
+  CONSUMER_LATENCY: 600
+  PUBLISHING_INTERVAL: 60
+  PRODUCER_RANDOM_START_DELAY: 60
+  PRODUCER_SCHEDULER_THREADS: 50
+  NIO_THREADS: 10
+  NIO_THREAD_POOL: 20
+  HEARTBEAT_SENDER_THREADS: 10
+
+applications:
+  - name: nondurable1
+    <<: *app_defaults
+    env:
+      <<: *perf_test_defaults
+      QUEUE_PATTERN: 'nondurable%d'
+      QUEUE_PATTERN_FROM: 1
+      QUEUE_PATTERN_TO: 500
+
+  - name: nondurable2
+    <<: *app_defaults
+    env:
+      <<: *perf_test_defaults
+      QUEUE_PATTERN: 'nondurable%d'
+      QUEUE_PATTERN_FROM: 501
+      QUEUE_PATTERN_TO: 1000
+
+  - name: durable1
+    <<: *app_defaults
+    env:
+      <<: *perf_test_defaults
+      AUTO_DELETE: false
+      FLAG: persistent
+      QUEUE_PATTERN: 'durable%d'
+      QUEUE_PATTERN_FROM: 1
+      QUEUE_PATTERN_TO: 500
+
+  - name: durable2
+    <<: *app_defaults
+    env:
+      <<: *perf_test_defaults
+      AUTO_DELETE: false
+      FLAG: persistent
+      QUEUE_PATTERN: 'durable%d'
+      QUEUE_PATTERN_FROM: 501
+      QUEUE_PATTERN_TO: 1000
+
+  - name: exclusive1
+    <<: *app_defaults
+    env:
+      <<: *perf_test_defaults
+      EXCLUSIVE: true
+      AUTO_DELETE: true
+      QUEUE_PATTERN: 'exclusive%d'
+      QUEUE_PATTERN_FROM: 1
+      QUEUE_PATTERN_TO: 500
+
+  - name: exclusive2
+    <<: *app_defaults
+    env:
+      <<: *perf_test_defaults
+      EXCLUSIVE: true
+      AUTO_DELETE: true
+      QUEUE_PATTERN: 'exclusive%d'
+      QUEUE_PATTERN_FROM: 501
+      QUEUE_PATTERN_TO: 1000
