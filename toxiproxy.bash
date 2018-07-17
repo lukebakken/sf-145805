@@ -99,7 +99,12 @@ then
     errexit "please ensure jq is in PATH"
 fi
 
-readonly perftest="$curdir/rabbitmq-perf-test-2.2.0.M1/bin/runjava com.rabbitmq.perf.PerfTest"
+readonly runjava="$curdir/rabbitmq-perf-test-2.2.0.M1/bin/runjava"
+if [[ ! -x $runjava ]]
+then
+    errexit "please download PerfTest 2.2.0.M1 and extract into $curdir"
+fi
+readonly perftest="$runjava com.rabbitmq.perf.PerfTest"
 readonly toxiproxy_cli="$curdir/toxiproxy-cli-linux-amd64"
 readonly toxiproxy_server="$curdir/toxiproxy-server-linux-amd64"
 
@@ -110,7 +115,7 @@ else
     for toxibin in toxiproxy-cli-linux-amd64 toxiproxy-server-linux-amd64
     do
         pinfo_n "downloading $toxibin..."
-        browser_download_url="$(curl -s https://api.github.com/repos/Shopify/toxiproxy/releases/latest | jq -r ".assets[] | select(.name == \"toxiproxy-cli-linux-amd64\") | .browser_download_url")"
+        browser_download_url="$(curl -s https://api.github.com/repos/Shopify/toxiproxy/releases/latest | jq -r ".assets[] | select(.name == \"$toxibin\") | .browser_download_url")"
         curl -sLO "$browser_download_url"
         chmod 755 "$toxibin"
         echo 'DONE'
@@ -140,7 +145,7 @@ sleep 10
 # Remove rule to timeout connections, PerfTest should recover
 # "$toxiproxy_cli" toxic remove --toxicName amqp_5672_0_timeout amqp_5672_0
 
-# Toggle status of proxy
+# Toggle status of proxy to re-enable
 "$toxiproxy_cli" toggle amqp_5672_0
 
 wait
