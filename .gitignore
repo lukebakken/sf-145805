@@ -1,2 +1,4 @@
 *.pcap*
 logs/
+rabbitmq-perf-test*/
+toxiproxy-*-linux-amd64
