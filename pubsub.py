@@ -19,6 +19,7 @@ def new_conn():
                 conn.close()
             conn = None
             print('[ERROR] could not open connection ({}), re-trying'.format(type(ex).__name__))
+            time.sleep(1)
     pub_chan = conn.channel()
     queue_name = pub_chan.queue_declare(exclusive=True).method.queue
     sub_chan = conn.channel()
