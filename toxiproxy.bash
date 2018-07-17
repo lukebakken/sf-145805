@@ -112,13 +112,14 @@ if [[ -x $toxiproxy_cli && -x $toxiproxy_server ]]
 then
     pinfo "toxiproxy cli and server exist in $curdir"
 else
+    readonly toxiproxy_json="$(curl -s https://api.github.com/repos/Shopify/toxiproxy/releases/latest)"
     for toxibin in toxiproxy-cli-linux-amd64 toxiproxy-server-linux-amd64
     do
         pinfo_n "downloading $toxibin..."
-        browser_download_url="$(curl -s https://api.github.com/repos/Shopify/toxiproxy/releases/latest | jq -r ".assets[] | select(.name == \"$toxibin\") | .browser_download_url")"
+        browser_download_url="$(jq -r ".assets[] | select(.name == \"$toxibin\") | .browser_download_url" <<< "$toxiproxy_json")"
         curl -sLO "$browser_download_url"
         chmod 755 "$toxibin"
-        echo 'DONE'
+        echo 'done'
     done
 fi
 
