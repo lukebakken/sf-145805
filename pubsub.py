@@ -13,12 +13,12 @@ def new_conn():
     while conn is None:
         try:
             conn = pika.BlockingConnection(conn_params)
-        except pika.exceptions.ConnectionClosed:
+        except (pika.exceptions.ConnectionClosed,
+                pika.exceptions.IncompatibleProtocolError) as ex:
             if conn is not None:
                 conn.close()
             conn = None
-            print('[ERROR] could not open connection, re-trying in 5 seconds')
-            time.sleep(5)
+            print('[ERROR] could not open connection ({}), re-trying'.format(type(ex).__name__))
     pub_chan = conn.channel()
     queue_name = pub_chan.queue_declare(exclusive=True).method.queue
     sub_chan = conn.channel()
